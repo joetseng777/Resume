@@ -1,0 +1,346 @@
+<html><head><base href="https://%E5%B9%AB%E6%88%91%E5%B0%87%E9%83%B5%E4%BB%B6%E6%94%B9%E6%88%90badc01dwz@gmail.com">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>個人履歷 - 曾琬鈞</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #fef6e4;
+    display: flex;
+    min-height: 100vh;
+  }
+  .container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100vh;
+  }
+  .sidebar {
+    width: 300px;
+    background-color: #FFB7B2;
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 1.1em;
+    overflow-y: auto;
+    height: 100%;
+  }
+  .main-content {
+    flex: 1;
+    padding: 40px;
+    background-color: #FFDAC1;
+    overflow-y: auto;
+    height: 100%;
+  }
+  .profile-img-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-img-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(30deg, #FFB7B2 0%, #FF9AA2 55%, #FFDAC1 100%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 1;
+  }
+  .profile-img {
+    width: 190px;
+    height: 190px;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    clip-path: polygon(50% 5%, 95% 27.5%, 95% 72.5%, 50% 95%, 5% 72.5%, 5% 27.5%);
+    z-index: 2;
+  }
+  h1, h2 {
+    color: #FF9AA2;
+    margin-bottom: 20px;
+  }
+  .page-title {
+    background-color: #FFB7B2;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: inline-block;
+    margin-bottom: 30px;
+    font-size: 1.5em;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .sidebar h2 {
+    color: #fff;
+    border-bottom: 2px dashed #fff;
+    padding-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    font-size: 1.3em;
+  }
+  .info-item {
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  .info-item strong {
+    display: inline-block;
+    width: 100px;
+    color: #fff;
+    font-weight: bolder;
+  }
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .skill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .skill-name {
+    flex: 1;
+    font-weight: bold;
+    color: #fff;
+  }
+  .skill-rating {
+    width: 100px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .skill-level {
+    height: 100%;
+    background-color: #FF9AA2;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease;
+  }
+  .skill-level::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+  }
+  .cert-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .cert-item {
+    background-color: #FFB7B2;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+  .cert-item:hover {
+    background-color: #FF9AA2;
+  }
+  .experience-item {
+    margin-bottom: 20px;
+  }
+  .experience-item h3 {
+    color: #FF9AA2;
+    margin-bottom: 5px;
+  }
+  .experience-item .period {
+    font-style: italic;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+  }
+  .sidebar-section {
+    margin-bottom: 30px;
+    background-color: rgba(255,255,255,0.2);
+    padding: 15px;
+    border-radius: 15px;
+  }
+  .main-section {
+    background-color: #fff;
+    border-radius: 30px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  .main-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .main-section h2 {
+    background-color: #FFB7B2;
+    color: #fff;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 1.2em;
+  }
+
+  /* Custom scrollbar styles */
+  .sidebar::-webkit-scrollbar, .main-content::-webkit-scrollbar {
+    width: 10px;
+  }
+  .sidebar::-webkit-scrollbar-track, .main-content::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+  }
+  .sidebar::-webkit-scrollbar-thumb, .main-content::-webkit-scrollbar-thumb {
+    background: #FF9AA2;
+    border-radius: 5px;
+  }
+  .sidebar::-webkit-scrollbar-thumb:hover, .main-content::-webkit-scrollbar-thumb:hover {
+    background: #FF7A82;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <!-- <div class="profile-img-container">
+        <img src="https://drive.google.com/uc?export=view&id=1h9xNNoofZvKUIWF5oY3RvgSh5FPobqvb" alt="測試圖片" class="profile-img" width="190" height="190">
+    </div> -->
+    
+
+      
+      <div class="sidebar-section">
+        <h2>個人資訊</h2>
+        <div class="info-item"><strong>姓名：</strong>曾琬鈞</div>
+        <div class="info-item"><strong>職稱：</strong>軟體工程師</div>
+        <div class="info-item"><strong>電子郵件：</strong> badc01dwz@gmail.com</div>
+        <div class="info-item"><strong>電話：</strong> 0908091052</div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>學歷</h2>
+        <div class="info-item"><strong>學校：</strong> 台中科技大學</div>
+        <div class="info-item"><strong>科系：</strong> 國際貿易科系</div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>專業技能</h2>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">團隊合作</span>
+            <div class="skill-rating">
+              <div class="skill-level" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">5S管理</span>
+            <div class="skill-rating">
+              <div class="skill-level" style="width: 80%;"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">網頁維護</span>
+            <div class="skill-rating">
+              <div class="skill-level" style="width: 80%;"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">社群媒體管理</span>
+            <div class="skill-rating">
+              <div class="skill-level" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">前端網頁設計</span>
+            <div class="skill-rating">
+              <div class="skill-level" style="width: 80%;"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">顧客服務</span>
+            <div class="skill-rating">
+              <div class="skill-level" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <h1 class="page-title"> 曾琬鈞.JoeTseng - 個人履歷</h1>
+
+      <section class="main-section">
+        <h2>簡介</h2>
+        <p>畢業於台中科技大學國際貿易科系。我的職業生涯充滿了多樣性和挑戰，我是個全端開發工程師，熟練掌握JavaScript、HTML、jQuery、CSS、PHP、MySQL和Python，並且精通設計工具如Illustrator和Photoshop，持有網頁設計丙級執照。</p>
+        <p>在工作中，我以強大的執行力和敏銳的判斷力見長，能迅速針對任務擬定明確的方針，並有效調動適合的組員，確保專案高效推進。最近參與的影像辨識專案中，儘管對YOLO模型和LINE-Bot的建置不太熟悉，我依然透過自學和研究，成功克服技術挑戰，圓滿達成目標。在這個過程中，我展示了卓越的問題解決能力和團隊協作精神。</p>
+        <p>雖然我一向追求高效率，有時可能會因為急於完成而忽略一些細節，但我已意識到這點，並不斷提升自己在專案管理上的細緻度，以確保每一項工作都能完美呈現。</p>
+      </section>
+
+      <section class="main-section">
+        <h2>工作經歷</h2>
+        <div class="experience-item">
+          <h3>業務專員 - 髮品造型品公司</h3>
+          <div class="period">1年6個月</div>
+          <ul>
+            <li>負責髮品和造型品的銷售，達成並超越銷售目標</li>
+            <li>深入研究顧客需求，提供個性化的產品推薦</li>
+            <li>建立並維護長期客戶關係，提高客戶滿意度和忠誠度</li>
+            <li>參與產品培訓，持續更新產品知識，提供專業建議</li>
+          </ul>
+        </div>
+        <div class="experience-item">
+          <h3>網頁小編 - 藥局專案</h3>
+          <div class="period">6個月</div>
+          <ul>
+            <li>負責藥局Facebook頁面的內容策劃和管理</li>
+            <li>製作和編輯短視頻，增加用戶互動和參與度</li>
+            <li>撰寫吸引人的貼文，提高粉絲數量和互動率</li>
+            <li>分析社交媒體數據，優化內容策略</li>
+            <li>設計並實現簡單的網頁元素，提升頁面吸引力</li>
+          </ul>
+        </div>
+        <div class="experience-item">
+          <h3>網頁維護專員 - 網路冷凍食品公司</h3>
+          <div class="period">1年</div>
+          <ul>
+            <li>負責公司電子商務網站的日常維護和更新</li>
+            <li>處理線上訂單，確保訂單處理和發貨流程順暢</li>
+            <li>協助優化網站用戶體驗，提高轉化率</li>
+            <li>參與網站功能改進和新功能開發的討論</li>
+            <li>運用HTML、CSS進行基礎的前端開發工作</li>
+          </ul>
+        </div>
+        <div class="experience-item">
+          <h3>管理專員 - 醫療生技公司</h3>
+          <div class="period">5年</div>
+          <ul>
+            <li>實施並維護5S管理系統，提高工作場所的效率和安全性</li>
+            <li>協調團隊合作，確保項目按時完成</li>
+            <li>制定和實施標準作業流程，提高工作效率</li>
+            <li>負責員工安全培訓，減少工作場所事故發生率</li>
+            <li>協助開發內部管理系統的用戶界面，提升操作便利性</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
