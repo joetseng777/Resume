@@ -1,222 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人履歷</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #fef6e4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            flex: 1;
+        }
+        .sidebar {
+            width: 100%;
+            background-color: #FFB7B2;
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 1.1em;
+            overflow-y: auto;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #FFDAC1;
+            overflow-y: auto;
+        }
+        .profile-img-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-img-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+              linear-gradient(30deg, #FFB7B2 0%, #FF9AA2 55%, #FFDAC1 100%);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            z-index: 1;
+        }
+        .profile-img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            clip-path: polygon(50% 5%, 95% 27.5%, 95% 72.5%, 50% 95%, 5% 72.5%, 5% 27.5%);
+            z-index: 2;
+        }
+        h1, h2 {
+            color: #FF9AA2;
+            margin-bottom: 20px;
+        }
+        .page-title {
+            background-color: #FFB7B2;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            color: #fff;
+            border-bottom: 2px dashed #fff;
+            padding-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            font-size: 1.3em;
+        }
+        .info-item {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .info-item strong {
+            display: inline-block;
+            width: 100px;
+            color: #fff;
+            font-weight: bolder;
+        }
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .skill-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .skill-name {
+            flex: 1;
+            font-weight: bold;
+            color: #fff;
+        }
+        .skill-rating {
+            width: 100px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .skill-level {
+            height: 100%;
+            background-color: #FF9AA2;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        .skill-level::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+        .cert-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .cert-item {
+            background-color: #FFB7B2;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .cert-item:hover {
+            background-color: #FF9AA2;
+        }
+        .experience-item {
+            margin-bottom: 20px;
+        }
+        .experience-item h3 {
+            color: #FF9AA2;
+            margin-bottom: 5px;
+        }
+        .experience-item .period {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        .sidebar-section {
+            margin-bottom: 30px;
+            background-color: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        .main-section {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .main-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .main-section h2 {
+            background-color: #FFB7B2;
+            color: #fff;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1.2em;
+        }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>個人履歷 - 曾琬鈞</title>
-<style>
-  body {
-    font-family: 'Comic Sans MS', 'Helvetica Neue', Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    background-color: #fef6e4;
-    display: flex;
-    min-height: 100vh;
-  }
-  .container {
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #fff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    border-radius: 20px;
-    overflow: hidden;
-    height: 100vh;
-  }
-  .sidebar {
-    width: 300px;
-    background-color: #FFB7B2;
-    color: #fff;
-    padding: 20px;
-    box-sizing: border-box;
-    font-size: 1.1em;
-    overflow-y: auto;
-    height: 100%;
-  }
-  .main-content {
-    flex: 1;
-    padding: 40px;
-    background-color: #FFDAC1;
-    overflow-y: auto;
-    height: 100%;
-  }
-  .profile-img-container {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .profile-img-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      linear-gradient(30deg, #FFB7B2 0%, #FF9AA2 55%, #FFDAC1 100%);
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    z-index: 1;
-  }
-  .profile-img {
-    width: 190px;
-    height: 190px;
-    object-fit: cover;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    clip-path: polygon(50% 5%, 95% 27.5%, 95% 72.5%, 50% 95%, 5% 72.5%, 5% 27.5%);
-    z-index: 2;
-  }
-  h1, h2 {
-    color: #FF9AA2;
-    margin-bottom: 20px;
-  }
-  .page-title {
-    background-color: #FFB7B2;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 30px;
-    display: inline-block;
-    margin-bottom: 30px;
-    font-size: 1.5em;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  .sidebar h2 {
-    color: #fff;
-    border-bottom: 2px dashed #fff;
-    padding-bottom: 10px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    font-size: 1.3em;
-  }
-  .info-item {
-    margin-bottom: 15px;
-    font-weight: bold;
-  }
-  .info-item strong {
-    display: inline-block;
-    width: 100px;
-    color: #fff;
-    font-weight: bolder;
-  }
-  .skill-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .skill-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .skill-name {
-    flex: 1;
-    font-weight: bold;
-    color: #fff;
-  }
-  .skill-rating {
-    width: 100px;
-    height: 20px;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-  }
-  .skill-level {
-    height: 100%;
-    background-color: #FF9AA2;
-    border-radius: 10px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: width 0.3s ease;
-  }
-  .skill-level::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 16px;
-    height: 16px;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 2px rgba(0,0,0,0.3);
-  }
-  .cert-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .cert-item {
-    background-color: #FFB7B2;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.95em;
-    transition: all 0.3s ease;
-    font-weight: bold;
-  }
-  .cert-item:hover {
-    background-color: #FF9AA2;
-  }
-  .experience-item {
-    margin-bottom: 20px;
-  }
-  .experience-item h3 {
-    color: #FF9AA2;
-    margin-bottom: 5px;
-  }
-  .experience-item .period {
-    font-style: italic;
-    color: #7f8c8d;
-    margin-bottom: 10px;
-  }
-  .sidebar-section {
-    margin-bottom: 30px;
-    background-color: rgba(255,255,255,0.2);
-    padding: 15px;
-    border-radius: 15px;
-  }
-  .main-section {
-    background-color: #fff;
-    border-radius: 30px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-  }
-  .main-section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  }
-  .main-section h2 {
-    background-color: #FFB7B2;
-    color: #fff;
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 1.2em;
-  }
+        /* Custom scrollbar styles */
+        .sidebar::-webkit-scrollbar, .main-content::-webkit-scrollbar {
+            width: 10px;
+        }
+        .sidebar::-webkit-scrollbar-track, .main-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+        .sidebar::-webkit-scrollbar-thumb, .main-content::-webkit-scrollbar-thumb {
+            background: #FF9AA2;
+            border-radius: 5px;
+        }
+        .sidebar::-webkit-scrollbar-thumb:hover, .main-content::-webkit-scrollbar-thumb:hover {
+            background: #FF7A82;
+        }
 
-  /* Custom scrollbar styles */
-  .sidebar::-webkit-scrollbar, .main-content::-webkit-scrollbar {
-    width: 10px;
-  }
-  .sidebar::-webkit-scrollbar-track, .main-content::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-  }
-  .sidebar::-webkit-scrollbar-thumb, .main-content::-webkit-scrollbar-thumb {
-    background: #FF9AA2;
-    border-radius: 5px;
-  }
-  .sidebar::-webkit-scrollbar-thumb:hover, .main-content::-webkit-scrollbar-thumb:hover {
-    background: #FF7A82;
-  }
-</style>
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                height: 100vh;
+            }
+            .sidebar {
+                width: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
   <div class="container">
