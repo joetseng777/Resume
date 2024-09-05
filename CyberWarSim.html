@@ -1,0 +1,337 @@
+<html><head><base href="https://websim.io/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>全球網路攻防模擬器</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
+    background-color: #000;
+    color: #00ff00;
+  }
+  #map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+  }
+  #overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  #header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; }
+    to { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00, 0 0 40px #00ff00; }
+  }
+  #stats {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    height: 150px;
+  }
+  .team {
+    text-align: center;
+    width: 45%;
+    background: rgba(0, 20, 40, 0.8);
+    border: 2px solid;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .team:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+  }
+  .team-red { border-color: #ff4136; }
+  .team-blue { border-color: #0074d9; }
+  .team h2 {
+    font-size: 18px;
+    margin: 0 0 5px 0;
+    text-shadow: 0 0 10px currentColor;
+  }
+  .team-red h2 { color: #ff4136; }
+  .team-blue h2 { color: #0074d9; }
+  #attacks {
+    position: absolute;
+    pointer-events: none;
+  }
+  .attack {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 1s infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    to { transform: scale(1.2); opacity: 0.2; box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+  }
+  .log {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: rgba(0, 20, 40, 0.6);
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 12px;
+    border: 1px solid #00ff00;
+    margin-top: 5px;
+  }
+  .log-entry {
+    margin-bottom: 4px;
+    padding: 3px;
+    background: rgba(0, 40, 80, 0.4);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+  }
+  .log-entry:hover {
+    background: rgba(0, 60, 120, 0.6);
+  }
+  .red { color: #ff4136; }
+  .blue { color: #0074d9; }
+  #controls {
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: rgba(0, 40, 80, 0.6);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-family: 'Orbitron', sans-serif;
+  }
+  button:hover {
+    background-color: rgba(0, 60, 120, 0.8);
+    box-shadow: 0 0 10px #00ff00;
+  }
+  .country-label {
+    position: absolute;
+    font-size: 12px;
+    pointer-events: none;
+    text-shadow: 1px 1px 2px #000, 0 0 5px #00ff00;
+    transition: opacity 0.3s;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 20, 40, 0.6);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00cc00;
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="overlay">
+  <div id="header">全球網路攻防模擬器</div>
+  <div id="stats">
+    <div class="team team-red">
+      <h2>紅隊 (攻擊方)</h2>
+      <p>攻擊次數: <span id="red-attacks">0</span></p>
+      <div class="log" id="red-log"></div>
+    </div>
+    <div class="team team-blue">
+      <h2>藍隊 (防禦方)</h2>
+      <p>成功防禦: <span id="blue-defenses">0</span></p>
+      <div class="log" id="blue-log"></div>
+    </div>
+  </div>
+</div>
+<div id="attacks"></div>
+<div id="controls">
+  <button id="speed-up">加速</button>
+  <button id="speed-down">減速</button>
+  <button id="reverse">反向</button>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+const svg = d3.select("#map")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+const projection = d3.geoMercator()
+  .scale((width - 3) / (2 * Math.PI))
+  .translate([width / 2, height / 2]);
+
+const path = d3.geoPath().projection(projection);
+
+let countries;
+
+d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
+  countries = topojson.feature(world, world.objects.countries).features;
+  svg.selectAll("path")
+    .data(countries)
+    .enter().append("path")
+    .attr("d", path)
+    .attr("fill", "#1a3050")
+    .attr("stroke", "#2a4060");
+});
+
+const attackMethods = [
+  "DDoS攻擊", "SQL注入", "跨站腳本攻擊(XSS)", "社交工程", "密碼暴力破解",
+  "中間人攻擊", "零日漏洞利用", "釣魚攻擊", "勒索軟體", "網路釣魚"
+];
+
+const defenseMethods = [
+  "防火牆更新", "入侵檢測系統(IDS)", "多因素認證", "加密通信", "安全意識培訓",
+  "漏洞掃描與修補", "網絡分段", "存取控制", "備份與恢復", "端點保護"
+];
+
+function getRandomCountry() {
+  return countries[Math.floor(Math.random() * countries.length)];
+}
+
+function getRandomLocation() {
+  const country = getRandomCountry();
+  const centroid = path.centroid(country);
+  return {
+    coords: centroid.length ? centroid : projection([0, 0]),
+    country: country
+  };
+}
+
+function getRandomMethod(methods) {
+  return methods[Math.floor(Math.random() * methods.length)];
+}
+
+let speed = 1;
+let direction = 1;
+
+function createAttack() {
+  const start = getRandomLocation();
+  const end = getRandomLocation();
+  
+  const attackElem = document.createElement("div");
+  attackElem.className = "attack";
+  attackElem.style.left = `${start.coords[0]}px`;
+  attackElem.style.top = `${start.coords[1]}px`;
+  const isRedAttack = Math.random() > 0.5;
+  attackElem.style.backgroundColor = isRedAttack ? "#ff4136" : "#0074d9";
+  
+  document.getElementById("attacks").appendChild(attackElem);
+
+  // Add country labels
+  const startLabel = createCountryLabel(start.country, start.coords, isRedAttack ? "red" : "blue");
+  const endLabel = createCountryLabel(end.country, end.coords, isRedAttack ? "blue" : "red");
+
+  const duration = (Math.random() * 2000 + 1000) / speed;
+  const anim = attackElem.animate([
+    { left: `${start.coords[0]}px`, top: `${start.coords[1]}px` },
+    { left: `${end.coords[0]}px`, top: `${end.coords[1]}px` }
+  ], {
+    duration: duration,
+    easing: "ease-in-out",
+    direction: direction > 0 ? "normal" : "reverse"
+  });
+
+  anim.onfinish = () => {
+    attackElem.remove();
+    startLabel.remove();
+    endLabel.remove();
+    updateStats(isRedAttack, start.country, end.country);
+  };
+}
+
+function createCountryLabel(country, coords, color) {
+  const label = document.createElement("div");
+  label.className = "country-label";
+  label.textContent = country.properties.name;
+  label.style.left = `${coords[0]}px`;
+  label.style.top = `${coords[1]}px`;
+  label.style.color = color === "red" ? "#ff4136" : "#0074d9";
+  document.getElementById("attacks").appendChild(label);
+  return label;
+}
+
+function updateStats(isRedAttack, startCountry, endCountry) {
+  if (isRedAttack) {
+    const redAttacks = document.getElementById("red-attacks");
+    redAttacks.textContent = parseInt(redAttacks.textContent) + 1;
+    logActivity(true, getRandomMethod(attackMethods), startCountry, endCountry);
+  } else {
+    const blueDefenses = document.getElementById("blue-defenses");
+    blueDefenses.textContent = parseInt(blueDefenses.textContent) + 1;
+    logActivity(false, getRandomMethod(defenseMethods), startCountry, endCountry);
+  }
+}
+
+function logActivity(isRedTeam, method, startCountry, endCountry) {
+  const logElement = document.getElementById(isRedTeam ? "red-log" : "blue-log");
+  const logEntry = document.createElement("div");
+  logEntry.className = "log-entry";
+  const startCountryName = startCountry ? startCountry.properties.name : "未知";
+  const endCountryName = endCountry ? endCountry.properties.name : "未知";
+  logEntry.innerHTML = `<span class="${isRedTeam ? 'red' : 'blue'}">${isRedTeam ? '攻擊' : '防禦'}:</span> ${method} (從 ${startCountryName} 到 ${endCountryName})`;
+  logElement.insertBefore(logEntry, logElement.firstChild);
+
+  if (logElement.children.length > 5) {
+    logElement.removeChild(logElement.lastChild);
+  }
+}
+
+let intervalId = setInterval(createAttack, 1000 / speed);
+
+document.getElementById("speed-up").addEventListener("click", () => {
+  speed *= 1.5;
+  clearInterval(intervalId);
+  intervalId = setInterval(createAttack, 1000 / speed);
+});
+
+document.getElementById("speed-down").addEventListener("click", () => {
+  speed /= 1.5;
+  clearInterval(intervalId);
+  intervalId = setInterval(createAttack, 1000 / speed);
+});
+
+document.getElementById("reverse").addEventListener("click", () => {
+  direction *= -1;
+});
+</script>
+</body></html>
